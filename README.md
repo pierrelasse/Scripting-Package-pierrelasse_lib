@@ -79,3 +79,26 @@ discordWebhook.send(WEBHOOK_ID, WEBHOOK_TOKEN, {
 ### [pierrelasse/lib/http](./@pierrelasse/lib/http.lua)
 
 Simple HTTP requests.
+
+### [pierrelasse/lib/SimpleCooldowns](./@pierrelasse/lib/SimpleCooldowns.lua)
+
+Manages cooldown timers.
+
+**Example:**
+
+```lua
+local cooldowns = SimpleCooldowns.new()
+
+-- set cooldown 'ability1' for 'user1' to 10 seconds
+cooldowns:set("user1", "ability1", 10)
+
+
+if cd:checkOrSet("player1", "ability1", 10) then
+    print("Still on cooldown!")
+else
+    print("Ability used!")
+end
+
+
+print("Remaining: ", cd:getRemaining("player1", "ability1"))
+```
