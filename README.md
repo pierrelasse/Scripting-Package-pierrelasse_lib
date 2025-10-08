@@ -57,6 +57,25 @@ commands.add("example", function (sender, args) end)
     end)
 ```
 
+### [pierrelasse/lib/discordWebhook](./@pierrelasse/lib/discordWebhook.lua)
+
+Send messages and/or embeds to a Discord channel using a webhook.
+
+**Example:**
+
+```lua
+local WEBHOOK_ID, WEBHOOK_TOKEN = "123456789012345678", "c29tZSBjb29sIHRva2VuIHlheQo"
+
+discordWebhook.send(WEBHOOK_ID, WEBHOOK_TOKEN, {
+    content = "Hello from Scripting!",
+    embeds = {{
+        title = "Test Embed",
+        description = "This is a sample message.",
+        color = 0x00ff00
+    }}
+})
+```
+
 ### [pierrelasse/lib/http](./@pierrelasse/lib/http.lua)
 
 Simple HTTP requests.
