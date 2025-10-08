@@ -27,6 +27,20 @@ chatcb.reg(player, timeout, {
 })
 ```
 
+### [pierrelasse/lib/clickListener](./@pierrelasse/lib/clickListener.lua)
+
+Simplifies detecting and handling player click interactions.
+
+**Example:**
+
+```lua
+clickListener.listen(function(event)
+    if event.button == "right" and event.at == "block" then
+        bukkit.send(event.player, "You right-clicked a block!")
+    end
+end)
+```
+
 ### [pierrelasse/lib/http](./@pierrelasse/lib/http.lua)
 
 Simple HTTP requests.
