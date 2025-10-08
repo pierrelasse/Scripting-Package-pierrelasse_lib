@@ -41,6 +41,22 @@ clickListener.listen(function(event)
 end)
 ```
 
+### [pierrelasse/lib/complete](./@pierrelasse/lib/complete.lua)
+
+Command tab completer.
+
+**Example:**
+
+```lua
+commands.add("example", function (sender, args) end)
+    .complete(function (completions, sender, args)
+        complete(completions, args[1],
+            bukkit.playersLoop(), -- iterator
+            function (i) return i.getName() end -- mapper
+        )
+    end)
+```
+
 ### [pierrelasse/lib/http](./@pierrelasse/lib/http.lua)
 
 Simple HTTP requests.
