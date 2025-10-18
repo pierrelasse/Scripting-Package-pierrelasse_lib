@@ -20,7 +20,7 @@ end
 ---@package
 ---@return integer
 function this:now()
-    return time.unix()
+    return time.unixMs()
 end
 
 ---@protected
@@ -47,7 +47,7 @@ function this:cleanup()
 
         local mapItr = map.values().iterator() ---@type java.Iterator<number>
         while mapItr.hasNext() do
-            if now >= mapItr.next() then
+            if mapItr.next() < now then
                 mapItr.remove()
             end
         end
@@ -109,7 +109,7 @@ end
 ---@param duration number seconds
 function this:set(id, key, duration)
     local map = self:getDataOrCreate(id)
-    map.put(key, self:now() + duration)
+    map.put(key, self:now() + (duration * 1000))
 
     self:updateTask()
 end
@@ -119,7 +119,7 @@ end
 ---@param duration number seconds
 function this:add(id, key, duration)
     local map = self:getDataOrCreate(id)
-    local v = math.max(map.get(key) or 0, self:now()) + duration
+    local v = math.max(map.get(key) or 0, self:now()) + (duration * 1000)
     map.put(key, v)
 
     self:updateTask()
@@ -135,7 +135,7 @@ function this:isActive(id, key, threshold)
     local t = map.get(key)
     if t == nil then return false end
     if threshold == nil then threshold = 0 end
-    return t > (self:now() + threshold)
+    return t > (self:now() + (threshold * 1000))
 end
 
 ---@param id string
@@ -146,7 +146,7 @@ function this:getRemaining(id, key)
     if map == nil then return 0 end
     local t = map.get(key)
     if t == nil then return 0 end
-    return math.max(0, t - self:now())
+    return math.max(0, t - self:now()) / 1000
 end
 
 ---@param id string
