@@ -3,11 +3,12 @@ local PlayerInteractEvent = import("org.bukkit.event.player.PlayerInteractEvent"
 
 ---@class pierrelasse.lib.clickListener.Event
 ---@field event java.Object
+---@field player bukkit.entity.Player
+---@field itemStack bukkit.ItemStack?
 ---@field button "left"|"right"
 ---@field at "block"|"air"
 ---@field hand "hand"|"offhand"
----@field item bukkit.ItemStack?
----@field player bukkit.entity.Player
+---@field private item bukkit.ItemStack?
 
 ---@alias pierrelasse.lib.clickListener.Listener fun(event: pierrelasse.lib.clickListener.Event): boolean?
 
@@ -30,11 +31,12 @@ local function trigger(event, action)
     ---@type pierrelasse.lib.clickListener.Event
     local ev = {
         event = event,
+        player = event.getPlayer(),
+        itemStack = event.getItem(),
         button = (action == "LEFT_CLICK_AIR" or action == "LEFT_CLICK_BLOCK") and "left" or "right",
         at = (action == "LEFT_CLICK_AIR" or action == "RIGHT_CLICK_AIR") and "air" or "block",
         hand = event.getHand().name() == "OFF_HAND" and "offhand" or "hand",
-        item = event.getItem(),
-        player = event.getPlayer()
+        item = event.getItem(), -- TODO
     }
 
     for listener in forEach(this.listeners) do
