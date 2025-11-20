@@ -1,0 +1,6 @@
+[
+	{
+		"name": "pierrelasse/lib/integration/luckperms",
+		"deps": ["core"]
+	}
+]

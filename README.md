@@ -2,6 +2,29 @@
 
 Various rather small libraries.
 
+### [pierrelasse/lib/integration/luckperms](./@pierrelasse/lib/integration/luckperms.lua)
+
+Access the [LuckPerms API](https://luckperms.net/wiki/Developer-API-Usage).
+
+**Example:**
+
+```lua
+local luckperms = require("@pierrelasse/lib/integration/luckperms")
+
+
+local player = bukkit.player("example")
+
+local prefix = luckperms.getPrefix(player) or ""
+local suffix = luckperms.getSuffix(player) or ""
+
+-- Set using:
+-- - /lp user <user> meta set custom-value <value>
+-- - /lp group <group> meta set custom-value <value>
+local customValue = luckperms.getMetaValue(player, "custom-value")
+
+-- & more
+```
+
 ### [pierrelasse/lib/chatcb](./@pierrelasse/lib/chatcb.lua)
 
 Simple callbacks for players sending chat messages.
