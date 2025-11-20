@@ -2,5 +2,9 @@
 	{
 		"name": "pierrelasse/lib/integration/luckperms",
 		"deps": ["core"]
+	},
+	{
+		"name": "pierrelasse/lib/integration/worldguard",
+		"deps": ["bukkit/api"]
 	}
 ]
