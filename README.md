@@ -126,6 +126,10 @@ end
 print("Remaining: ", cd:getRemaining("player1", "ability1"))
 ```
 
+### [pierrelasse/lib/smallCaps](./@pierrelasse/lib/smallCaps.lua)
+
+Converts "example" to "ᴇxᴀᴍᴘʟᴇ".
+
 ### [pierrelasse/lib/trueDamage](./@pierrelasse/lib/trueDamage.lua)
 
 Damage entities bypassing damage modifiers like armor.
