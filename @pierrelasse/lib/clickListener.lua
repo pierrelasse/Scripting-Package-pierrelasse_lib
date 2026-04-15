@@ -1,14 +1,22 @@
 local PlayerInteractEvent = import("org.bukkit.event.player.PlayerInteractEvent")
+local PlayerInteractEntityEvent = import("org.bukkit.event.player.PlayerInteractEntityEvent")
 
 
 ---@class pierrelasse.lib.clickListener.Event
 ---@field event java.Object
+---
 ---@field player bukkit.entity.Player
----@field itemStack bukkit.ItemStack?
----@field button "left"|"right"
----@field at "block"|"air"
 ---@field hand "hand"|"offhand"
+---@field button "left"|"right"
+---@field at "air"|"block"|"entity"
+---
+---@field itemStack bukkit.ItemStack?
 ---@field private item bukkit.ItemStack?
+---
+---@field block? bukkit.block.Block
+---@field blockFace? bukkit.block.BlockFace
+---
+---@field entity? bukkit.Entity
 
 ---@alias pierrelasse.lib.clickListener.Listener fun(event: pierrelasse.lib.clickListener.Event): boolean?
 
@@ -26,18 +34,37 @@ function this.listen(handler)
 end
 
 ---@param event java.Object
----@param action any
+---@param action string
 local function trigger(event, action)
-    ---@type pierrelasse.lib.clickListener.Event
     local ev = {
         event = event,
-        player = event.getPlayer(),
-        itemStack = event.getItem(),
-        button = (action == "LEFT_CLICK_AIR" or action == "LEFT_CLICK_BLOCK") and "left" or "right",
-        at = (action == "LEFT_CLICK_AIR" or action == "RIGHT_CLICK_AIR") and "air" or "block",
-        hand = event.getHand().name() == "OFF_HAND" and "offhand" or "hand",
-        item = event.getItem(), -- TODO
+
+        player = event.player,
     }
+    ---@cast ev pierrelasse.lib.clickListener.Event
+
+    ev.hand = event.hand.name() == "HAND" and "hand" or "offhand"
+
+    if instanceof(event, PlayerInteractEvent) then
+        ev.button = action:startsWith("LEFT_CLICK") and "left" or "right"
+
+        ev.block = event.getClickedBlock()
+        if ev.block ~= nil then
+            ev.at = "block"
+            ev.blockFace = event.getBlockFace()
+        else
+            ev.at = "air"
+        end
+
+        ev.itemStack = event.item
+        -- TODO
+        ---@diagnostic disable-next-line: invisible
+        ev.item = ev.itemStack
+    elseif instanceof(event, PlayerInteractEntityEvent) then
+        ev.at = "entity"
+        ev.button = "right"
+        ev.entity = event.getRightClicked()
+    end
 
     for listener in forEach(this.listeners) do
         if listener(ev) == true then break end
@@ -47,20 +74,24 @@ end
 events.onStarted(function()
     events.listen(PlayerInteractEvent, function(event)
         if not event.isCancelled() then return end
-
         local action = event.getAction().name()
-        if action ~= "LEFT_CLICK_AIR" and action ~= "RIGHT_CLICK_AIR" then return end
-
-        trigger(event, action)
+        if action:endsWith("AIR") then
+            trigger(event, action)
+        end
     end)
     .priority("HIGH")
     .ignoreCancelled = true
 
     events.listen(PlayerInteractEvent, function(event)
         local action = event.getAction().name()
-        if action ~= "LEFT_CLICK_BLOCK" and action ~= "RIGHT_CLICK_BLOCK" then return end
+        if action:endsWith("BLOCK") then
+            trigger(event, action)
+        end
+    end)
 
-        trigger(event, action)
+    events.listen(PlayerInteractEntityEvent, function(event)
+        if not instanceof(event, PlayerInteractEntityEvent, true) then return end -- TODO
+        trigger(event, "ENTITY")
     end)
 end)
 
