@@ -1,0 +1,4 @@
+{
+	"name": "pierrelasse/lib/integration/packetevents",
+	"deps": ["core"]
+}

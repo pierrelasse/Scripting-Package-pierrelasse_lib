@@ -2,6 +2,26 @@
 
 Various rather small libraries.
 
+### [pierrelasse/lib/integration/packetevents](./@pierrelasse/lib/integration/packetevents/)
+
+Access the [packetevents API](https://docs.packetevents.com/).
+
+A list of packet types can be found [here](https://github.com/retrooper/packetevents/blob/2.0/api/src/main/java/com/github/retrooper/packetevents/protocol/packettype/PacketType.java).
+
+**Example:**
+
+```lua
+local packetevents = require("@pierrelasse/lib/integration/packetevents/")
+
+
+packetevents.listen("play", "server", "JOIN_GAME", function(event, wrapper)
+    local packet = wrapper()
+
+    packet.setWorldName("minecraft:overworld")
+end)
+
+```
+
 ### [pierrelasse/lib/integration/luckperms](./@pierrelasse/lib/integration/luckperms.lua)
 
 Access the [LuckPerms API](https://luckperms.net/wiki/Developer-API-Usage).
