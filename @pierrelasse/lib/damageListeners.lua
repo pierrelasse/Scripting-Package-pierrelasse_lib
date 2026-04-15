@@ -46,6 +46,7 @@ local EntityDamageByEntityEvent = import("org.bukkit.event.entity.EntityDamageBy
 ---
 ---@field damage number
 ---@field finalDamage number
+---@field isDeadly boolean
 ---@field cause pierrelasse.lib.damageListeners.Event.Cause
 ---
 ---@field damager? bukkit.Entity
@@ -84,6 +85,7 @@ events.onStarted(function()
         local entity = event.getEntity() ---@type bukkit.entity.Damageable
 
         local damage = event.getDamage()
+        local finalDamage = event.getFinalDamage()
 
         ---@type pierrelasse.lib.damageListeners.Event
         local ev = {
@@ -92,7 +94,10 @@ events.onStarted(function()
                 and entity or nil,
 
             damage = damage,
-            finalDamage = event.getFinalDamage(),
+            finalDamage = finalDamage,
+            isDeadly = bukkit.isLivingEntity(entity)
+                and finalDamage >= entity.getHealth()
+                or true,
             cause = event.getCause().toString():lower()
         }
         this.emit(ev)
@@ -115,6 +120,7 @@ events.onStarted(function()
         end
 
         local damage = event.getDamage()
+        local finalDamage = event.getFinalDamage()
 
         ---@type pierrelasse.lib.damageListeners.Event
         local ev = {
@@ -123,7 +129,8 @@ events.onStarted(function()
                 and entity or nil,
 
             damage = damage,
-            finalDamage = event.getFinalDamage(),
+            finalDamage = finalDamage,
+            isDeadly = finalDamage >= entity.getHealth(),
             cause = event.getCause().toString():lower(),
 
             damager = damager,
